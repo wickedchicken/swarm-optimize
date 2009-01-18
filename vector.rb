@@ -1,7 +1,7 @@
 class Swarm
 	class BoundedArray < Array
 		def [](idx)
-			return self[idx] unless ((idx < 0) or (idx > self.length))
+			return self.at(idx) unless ((idx < 0) or (idx > self.length))
 			return 0.0
 		end
 	end
@@ -31,7 +31,7 @@ class Swarm
 
 		@nrg = nrg_func unless nrg_func.is_nil?
 		@win = window
-		@arry = Array.new(size) {|x| (rand * run - range[:min] }
+		@arry = BoundedArray.new(size) {|x| (rand * run - range[:min] }
 		raise "window size less than swarm size" unless @arry.length > @win
 	end
 
