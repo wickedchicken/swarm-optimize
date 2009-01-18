@@ -33,6 +33,8 @@ class Swarm
 		@win = window
 		@arry = BoundedArray.new(size) {|x| (rand * run - range[:min] }
 		raise "window size less than swarm size" unless @arry.length > @win
+		raise "window size less than three" unless @win > 3
+		raise "window size must be odd" unless (@win % 2 == 0)
 	end
 
 	def arry
