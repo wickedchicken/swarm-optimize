@@ -18,8 +18,8 @@ class Creation < Test::Unit::TestCase
 		#check that function is working properly, etc
 	end
 
-	def test_train_default
+	def test_train_step_default
 		swarm = Swarm.new
-		assert(swarm.train,'could not train the swarm')
+		assert(swarm.train_step,'could not perform training step on the swarm')
 	end
 end
