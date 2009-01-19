@@ -95,10 +95,10 @@ class Swarm
 		@arry
 	end
 
-	def train_step(
+	def train_step(rate=1.0)
 		side,slices = getslices
 		slices.each {|indices|
-			accum = @trainfunc.call(1.0,indices)
+			accum = @trainfunc.call(rate,indices)
 			for i in 0..@arry.length-1 do
 				@arry[i] += accum
 			end
