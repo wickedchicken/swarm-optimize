@@ -15,21 +15,19 @@ class Swarm
 
 		end
 	end
-#	@trainfunc = { |rate,slice|
-#		# breaks down if window < 3
-#		# should be odd...
-#		idx = slice.length/2
-#		yi = slice[idx]
-#		ei = rate
-#		slice.length.times.map {|x|
-			
-	def calc_nrg
+
+	def getslices
 		side = (@win/2)
 		# some inefficiencies
 		slices = (-side..@arry.length-2-side).to_a.map {|i|
 			(i..i+@win-1).to_a
 		}
 
+		return side,slices
+	end
+			
+	def calc_nrg
+		side,slices = getslices
 		slices.each {|indices|
 			idx = indices[side]
 
@@ -53,9 +51,6 @@ class Swarm
 		       nrg_func = nil)
 		run = range[:min] - range[:max]
 
-		@nrg = nrg_func unless nrg_func.nil?
-		@win = window
-		@arry = BoundedArray.new(size) {|x| [(rand * run - range[:min]) , 0.0]}
 		@nrg = lambda { |slice|
 			# breaks down if window < 3
 			# should be odd...
@@ -64,7 +59,32 @@ class Swarm
 			[idx,idx+1].map {|x| slice[x] - slice[x-1]}.inject {|accum,obj| accum + obj*obj }
 		}
 
+		@trainfunc = { |rate,slice|
+			# breaks down if window < 3
+			# should be odd...
 
+			accum = Array.new(size) {|x| 0.0}
+
+			idx = slice.length/2
+			slopefunc = lambda {|x,i,slope| (slope-(x-i).abs.to_f)/slope}
+
+			yi = @arry[slice[idx]][0]
+			ei = @arry[slice[idx]][1]
+			(0..slice.length-1).to_a.map {|q|
+				modifier = slopefunc.call(slice[q],slice[idx],idx) * rate
+				yx = @arry[slice[q]][0]
+				ex = @arry[slice[q]][1]
+
+				#you could also take into account whole slice instead of one...
+				motion = (yi-yx)*(ex-yi) # go away from high energy regions
+
+				accum[slice[q]] += modifier*motion}
+			return accum
+		}
+
+		@nrg = nrg_func unless nrg_func.nil?
+		@win = window
+		@arry = BoundedArray.new(size) {|x| [(rand * run - range[:min]) , 0.0]}
 
 		raise "window size less than swarm size" unless @arry.length > @win
 		raise "window size less than three" unless @win >= 3
@@ -75,9 +95,9 @@ class Swarm
 		@arry
 	end
 
-	def train(niter = 1)
-		slices = (@arry.length-@win).times {|i| @arry[i,@win]}
-		rates = slices.map @nrg
-		rates.zip(slices).map @trainfunc
+	def train_step(
+		side,slices = getslices
+		slices.each {|indices|
+			idx = indices[side]
 	end
 end
