@@ -59,7 +59,7 @@ class Swarm
 			[idx,idx+1].map {|x| slice[x] - slice[x-1]}.inject {|accum,obj| accum + obj*obj }
 		}
 
-		@trainfunc = { |rate,slice|
+		@trainfunc = lambda { |rate,slice|
 			# breaks down if window < 3
 			# should be odd...
 
@@ -98,6 +98,12 @@ class Swarm
 	def train_step(
 		side,slices = getslices
 		slices.each {|indices|
-			idx = indices[side]
+			accum = @trainfunc.call(1.0,indices)
+			for i in 0..@arry.length-1 do
+				@arry[i] += accum
+			end
+
+			self.calc_nrg
+		}
 	end
 end
