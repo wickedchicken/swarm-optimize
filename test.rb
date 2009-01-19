@@ -1,3 +1,8 @@
+# test cases to make sure everything is working OK
+#
+# copyright Michael Stipicevic 2009
+# see COPYING and COPYING.LESSER for details
+
 require 'test/unit'
 load 'vector.rb'
 

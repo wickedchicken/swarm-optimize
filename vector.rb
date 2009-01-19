@@ -1,3 +1,8 @@
+# the main class that implements the particle swarm and training algorithms
+#
+# copyright Michael Stipicevic 2009
+# see COPYING and COPYING.LESSER for details
+
 class Swarm
 	class BoundedArray < Array
 		def [](idx)

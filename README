@@ -1,0 +1,6 @@
+This software, as yet unnamed, is an implementation of a small particle swarm optimizer I wrote. It is inspired by the Self Organizing Map training algorithm.
+
+This software is Copyright 2009 Michael Stipicevic
+This software is released under the GNU Lesser General Public License (see COPYING and COPYING.LESSER for details)
+
+The author can be contacted at stipim >at< rpi ]dot[ edu, or mstipicevic >at< ieee [dot] org.
