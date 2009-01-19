@@ -26,7 +26,7 @@ class Swarm
 	def calc_nrg
 		side = (@win/2)
 		# some inefficiencies
-		slices = (-side..@arry.length-1-side).to_a.map {|i|
+		slices = (-side..@arry.length-2-side).to_a.map {|i|
 			(i..i+@win-1).to_a
 		}
 
