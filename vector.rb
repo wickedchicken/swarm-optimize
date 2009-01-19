@@ -5,22 +5,36 @@ class Swarm
 			return 0.0
 		end
 	end
-	@nrg = { |slice|
+	@nrg = lambda { |slice|
 		# breaks down if window < 3
 		# should be odd...
 		idx = slice.length/2
-		[idx,idx+1].map({|x| slice[x] - slice[x-1]}).inject {|accum,obj| accum + obj*obj }
+		[idx,idx+1].map {|x| slice[x] - slice[x-1]}.inject {|accum,obj| accum + obj*obj }
 	}
 
-	@trainfunc = { |rate,slice|
-		# breaks down if window < 3
-		# should be odd...
-		idx = slice.length/2
-		yi = slice[idx]
-		ei = rate
-		slice.length.times.map {|x|
+#	@trainfunc = { |rate,slice|
+#		# breaks down if window < 3
+#		# should be odd...
+#		idx = slice.length/2
+#		yi = slice[idx]
+#		ei = rate
+#		slice.length.times.map {|x|
 			
+	def calc_nrg
+		side = @win/2
+		# some inefficiencies
+		((-side+1)..(@arry.length+side-2)).each_slice(@win) {|indices|
+			idx = indices[side]
+			@arry[idx][1] = @nrg.call(indices.map {|x| @arry[x][0]})
+		}
 
+		@arry.each {|x|
+			puts x[0] + "\t" + x[1]
+		}
+	end
+
+				
+			
 	# redo to be hash set
 	def initialize(size=50,
 		       range = {:min => 0.0,
@@ -31,10 +45,12 @@ class Swarm
 
 		@nrg = nrg_func unless nrg_func.is_nil?
 		@win = window
-		@arry = BoundedArray.new(size) {|x| (rand * run - range[:min] }
+		@arry = BoundedArray.new(size) {|x| [(rand * run - range[:min]) , 0.0]}
+		
+
 		raise "window size less than swarm size" unless @arry.length > @win
-		raise "window size less than three" unless @win > 3
-		raise "window size must be odd" unless (@win % 2 == 0)
+		raise "window size less than three" unless @win >= 3
+		raise "window size must be odd" unless (@win % 2 == 1)
 	end
 
 	def arry
