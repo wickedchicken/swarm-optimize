@@ -43,7 +43,7 @@ class Swarm
 		       nrg_func = nil)
 		run = range[:min] - range[:max]
 
-		@nrg = nrg_func unless nrg_func.is_nil?
+		@nrg = nrg_func unless nrg_func.nil?
 		@win = window
 		@arry = BoundedArray.new(size) {|x| [(rand * run - range[:min]) , 0.0]}
 		
