@@ -21,4 +21,5 @@ class Creation < Test::Unit::TestCase
 	def test_train_default
 		swarm = Swarm.new
 		assert(swarm.train,'could not train the swarm')
+	end
 end
